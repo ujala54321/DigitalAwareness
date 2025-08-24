@@ -1,0 +1,163 @@
+﻿@model List<DigitalAwareness.Models.User>
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">
+                @if (ViewBag.IsAdmin)
+                {
+                    <span>Admin Dashboard - All Users</span>
+                }
+                else
+                {
+                    <span>User Dashboard</span>
+                }
+            </h2>
+        </div>
+    </div>
+
+    @if (ViewBag.IsAdmin)
+    {
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Statistics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 class="text-primary">@Model.Count</h4>
+                                    <p>Total Users</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 class="text-success">@Model.Count(u => u.IsAdmin)</h4>
+                                    <p>Admins</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 class="text-info">@Model.Count(u => !u.IsAdmin)</h4>
+                                    <p>Regular Users</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 class="text-warning">@Model.Count(u => u.CreatedDate >= DateTime.Today)</h4>
+                                    <p>New Today</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>
+                        @if (ViewBag.IsAdmin)
+                        {
+                            <span>User List</span>
+                        }
+                        else
+                        {
+                            <span>Your Profile Information</span>
+                        }
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Designation</th>
+                                    <th>Location</th>
+                                    <th>Referral Code</th>
+                                    <th>Joined Date</th>
+                                    @if (ViewBag.IsAdmin)
+                                    {
+                                        <th>Role</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var user in Model)
+                                {
+                                    <tr>
+                                        <td>@user.FirstName @user.LastName</td>
+                                        <td>@user.Email</td>
+                                        <td>@user.PhoneNumber</td>
+                                        <td>@user.Designation</td>
+                                        <td>@user.City, @user.State</td>
+                                        <td>
+                                            <span class="badge bg-primary">@user.ReferralCode</span>
+                                        </td>
+                                        <td>@user.CreatedDate.ToString("dd MMM yyyy")</td>
+                                        @if (ViewBag.IsAdmin)
+                                        {
+                                            <td>
+                                                @if (user.IsAdmin)
+                                                {
+                                                    <span class="badge bg-success">Admin</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">User</span>
+                                                }
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (!ViewBag.IsAdmin && Model.Any())
+    {
+        var user = Model.First();
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Complete Profile Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Father's Name:</strong> @user.FatherName</p>
+                                <p><strong>Gender:</strong> @user.Gender</p>
+                                <p><strong>Birth Date:</strong> @user.BirthDate.ToString("dd MMM yyyy")</p>
+                                <p><strong>Village:</strong> @user.Village</p>
+                                <p><strong>Post:</strong> @user.Post</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Block:</strong> @user.Block</p>
+                                <p><strong>Pincode:</strong> @user.Pincode</p>
+                                <p><strong>Referral Number:</strong> @user.ReferralNumber</p>
+                                <p><strong>Member Since:</strong> @user.CreatedDate.ToString("dd MMM yyyy")</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

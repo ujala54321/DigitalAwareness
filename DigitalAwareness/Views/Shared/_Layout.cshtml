@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Your Company</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DigitalAwareness.styles.css" asp-append-version="true" />
+    <style>
+        /* Center logo in navbar */
+        .navbar-brand {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+        }
+
+            .navbar-brand img {
+                max-height: 50px;
+                width: auto;
+                transition: opacity 0.3s ease;
+            }
+
+                .navbar-brand img:hover {
+                    opacity: 0.8;
+                }
+
+            .navbar-brand span {
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #333;
+            }
+
+        /* Ensure navbar items don't overlap with centered logo */
+        .navbar-nav {
+            z-index: 999;
+        }
+
+        /* Mobile responsive adjustments */
+       /* media (max-width: 768px) {*/
+       /*    .navbar-brand
+
+        {
+            position: relative;
+            left: auto;
+            transform: none;
+            margin: 0 auto;
+        }
+
+        .navbar-brand img {
+            max-height: 35px;
+        }
+
+        .navbar-brand span {
+            font-size: 1.25rem;
+        }
+
+        /* On mobile, center the brand in collapsed navbar */
+       /* .navbar-collapse.show .navbar-brand {
+            text-align: center;
+            display: block;
+            margin: 10px auto;
+        }
+
+        }*/
+
+        /* Ensure proper spacing for navbar items 
+        .navbar-collapse {
+            justify-content: space-between;
+        }*/
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+
+                <!-- Centered logo in navbar -->
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logon.jpg" alt="Company Logo"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                    <span style="display: none;">Your Company</span>
+                </a>
+
+                <!-- Mobile toggle button -->
+                <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Welcome, @User.FindFirst("FullName")?.Value
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                            <button type="submit" class="dropdown-item">Logout</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - Your Company - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
